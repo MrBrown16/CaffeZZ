@@ -1,6 +1,7 @@
-package com.mygdx.game;
+package com.mygdx.game.tiled;
 
 import static com.badlogic.gdx.graphics.g2d.Batch.*;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,7 +13,7 @@ import com.badlogic.gdx.maps.tiled.renderers.BatchTiledMapRenderer;
 
 public class IsometricTiledMapRenderer extends BatchTiledMapRenderer {
 
-	private float TILE_WIDTH_HALF;
+    private float TILE_WIDTH_HALF;
 	private float TILE_HEIGHT_HALF;
 
 	public IsometricTiledMapRenderer(TiledMap map,String baseTileLayerName) {

@@ -9,18 +9,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GuiThingy extends JFrame {
-    private JComboBox<CharacterActor> groupComboBox;
-    private JComboBox<DirectionCharacterActor> actorComboBox;
+    private JComboBox<FurnitureActor> groupComboBox;
+    private JComboBox<MyActor> actorComboBox;
     private JComboBox<MyActor> partsComboBox;
     private JTextField xField, yField, widthField, heightField, originXField, originYField, scaleField;
     private JButton applyButton;
 
-    private ReorderableArrayList<CharacterActor> groups;
-    private CharacterActor selectedGroup;
-    private DirectionCharacterActor selectedActor;
+    private ReorderableArrayList<DepthOrderableActor> groups;
+    private DepthOrderableActor selectedGroup;
+    private MyActor selectedActor;
     private MyActor selectedBodyPart;
 
-    public GuiThingy(ReorderableArrayList<CharacterActor> groups) {
+    public GuiThingy(ReorderableArrayList<DepthOrderableActor> groups) {
         this.groups = groups;
         if (this.groups != null) {
             System.out.println("Groups:"+groups);
@@ -30,11 +30,11 @@ public class GuiThingy extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-        groupComboBox = new JComboBox<>(groups.toArray(new CharacterActor[groups.size()]));
+        groupComboBox = new JComboBox<>(groups.toArray(new FurnitureActor[groups.size()]));
         groupComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectedGroup = (CharacterActor) groupComboBox.getSelectedItem();
+                selectedGroup = (FurnitureActor) groupComboBox.getSelectedItem();
                 updateActorComboBox();
             }
         });
@@ -114,7 +114,7 @@ public class GuiThingy extends JFrame {
         if (selectedGroup != null) {
             System.out.println("selectedGroup not null");
             Integer first = -1;
-            for(DirectionCharacterActor entry: selectedGroup.directions.values()){
+            for(MyActor entry: selectedGroup.directions.values()){
                 if (first < 0) {
                     first = 0;
                     selectedActor = entry;
@@ -130,7 +130,7 @@ public class GuiThingy extends JFrame {
         if (selectedGroup != null) {
             System.out.println("selectedGroup not null");
             Integer first = -1;
-            for(DirectionCharacterActor entry: selectedGroup.directions.values()){
+            for(MyActor entry: selectedGroup.directions.values()){
                 if (first < 0) {
                     first = 0;
                     selectedActor = entry;
@@ -145,24 +145,29 @@ public class GuiThingy extends JFrame {
         if (selectedActor != null) {
             Integer first =-1;
             // partsComboBox.addItem(selectedGroup);
-            for (MyActor actor : selectedActor.bodyPartMap.values()) {
-                if (first < 0) {
-                    first = 0;
-                    selectedBodyPart = actor;
+            if (selectedActor.getClass().isAssignableFrom(DirectionCharacterActor.class)) {
+                
+                for (MyActor actor : ((DirectionCharacterActor)selectedActor).bodyPartMap.values()) {
+                    if (first < 0) {
+                        first = 0;
+                        selectedBodyPart = actor;
+                    }
+                    partsComboBox.addItem(actor);
                 }
-                partsComboBox.addItem(actor);
-            }
-            if (selectedActor.parts.length > 0) {
-                updateFields();
+                if (((DirectionCharacterActor)selectedActor).parts.length > 0) {
+                    updateFields();
+                }
             }
         }
     }
     private void initPartsComboBox() {
         Integer first =-1;
-        for (MyActor actor : selectedActor.bodyPartMap.values()) {
-            if (first < 0) {
-                first = 0;
-                selectedBodyPart = actor;
+        if (selectedActor.getClass().isAssignableFrom(DirectionCharacterActor.class)) {
+            for (MyActor actor : ((DirectionCharacterActor)selectedActor).bodyPartMap.values()) {
+                if (first < 0) {
+                    first = 0;
+                    selectedBodyPart = actor;
+                }
             }
         }
     }

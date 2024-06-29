@@ -20,6 +20,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.Disposable;
+import com.mygdx.game.tiled.IsometricTiledMapRenderer;
 
 import datastructure.ReorderableArrayList;
 

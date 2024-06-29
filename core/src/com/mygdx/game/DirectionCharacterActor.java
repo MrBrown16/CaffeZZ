@@ -16,7 +16,7 @@ public class DirectionCharacterActor extends MyActor {
     MyActor lLeg, rLeg, lArm, rArm, body, head;
     public MyActor[] parts = new MyActor[6];
     // Map<Integer,MyActor[]> directions = new HashMap<>(4);
-    Map<String, BodyPartConfig> bodyPartConfig;
+    Map<String, ActorConfig> bodyPartConfig;
     public Map<String, MyActor> bodyPartMap;
     int direction;
     ReorderableArrayList<MyActor> children = new ReorderableArrayList<>();
@@ -63,7 +63,7 @@ public class DirectionCharacterActor extends MyActor {
             }
 		});
     }
-    public DirectionCharacterActor(AssetManager assetManager, int direction,Map<String, BodyPartConfig> config) {
+    public DirectionCharacterActor(AssetManager assetManager, int direction,Map<String, ActorConfig> config) {
         super(assetManager);
         this.bodyPartConfig = config;
         this.direction = direction;
@@ -136,7 +136,7 @@ public class DirectionCharacterActor extends MyActor {
         }
     }
     private void applyBodyPartConfig(MyActor actor, String bodyPart){
-        BodyPartConfig config = bodyPartConfig.get(bodyPart);
+        ActorConfig config = bodyPartConfig.get(bodyPart);
         actor.setPosition(config.x, config.y);
         actor.setSize(config.width, config.height);
         actor.setOrigin(config.originX, config.originY);    

@@ -13,22 +13,13 @@ import com.badlogic.gdx.utils.Align;
 import datastructure.ReorderableArrayList;
 import io.reactivex.rxjava3.core.Single;
 
-public class CharacterActor extends MyActor{
-    AssetManager assetManager;
-    Map<Integer,DirectionCharacterActor> directions = new HashMap<>(4);
-    int direction;
-    private Map<Integer,Map<String, BodyPartConfig>> directionConfigs;
-    ReorderableArrayList<CharacterActor> siblings;
+public class CharacterActor extends DepthOrderableActor{
 
 
-    public CharacterActor(AssetManager assetManager, ReorderableArrayList<CharacterActor> siblings) {
-        super(assetManager);
-        this.assetManager = assetManager;
-        this.siblings = siblings;
-        direction = Align.top;
+    public CharacterActor(AssetManager assetManager, ReorderableArrayList<DepthOrderableActor> siblings) {
+        super(assetManager, siblings);
         createDirectionGroups();
         setOriginX(getWidth()/2);
-        // setScaleX(-1);
     }
     private void createDirectionGroups(){
         MyActor lLeg, rLeg, lArm, rArm, body, head;
@@ -82,7 +73,7 @@ public class CharacterActor extends MyActor{
         directions.put(Align.bottom, bottomRight);
         
         
-        Map<String, BodyPartConfig> directionConfig = directionConfigs.get(direction);
+        Map<String, ActorConfig> directionConfig = directionConfigs.get(direction);
         setHeight(directionConfig.get("lLeg").originY+directionConfig.get("body").originY+directionConfig.get("head").height);
         setWidth(directionConfig.get("head").width);
         
@@ -92,34 +83,36 @@ public class CharacterActor extends MyActor{
         directionConfigs = new HashMap<>();
         
         // Top
-        Map<String, BodyPartConfig> directionConfig = new HashMap<>();//TODO: actually position them 
-        directionConfig.put("lLeg", new BodyPartConfig(27, 0, 12, 20, 6, 17, 1));
-        directionConfig.put("rLeg", new BodyPartConfig(32, 0, 12, 20, 6, 17, 1));
-        directionConfig.put("lArm", new BodyPartConfig(30, 18, 12, 25, 6, 17.5f, 1));
-        directionConfig.put("rArm", new BodyPartConfig(30, 18, 12, 25, 6, 17.5f, 1));
-        directionConfig.put("body", new BodyPartConfig(21, 18, 28, 32, 14, 16, 1));
-        directionConfig.put("head", new BodyPartConfig(0, 46, 70, 56, 35, 8, 1));
+        Map<String, ActorConfig> directionConfig = new HashMap<>();//TODO: actually position them 
+        directionConfig.put("lLeg", new ActorConfig(27, 0, 12, 20, 6, 17, 1));
+        directionConfig.put("rLeg", new ActorConfig(32, 0, 12, 20, 6, 17, 1));
+        directionConfig.put("lArm", new ActorConfig(30, 18, 12, 25, 6, 17.5f, 1));
+        directionConfig.put("rArm", new ActorConfig(30, 18, 12, 25, 6, 17.5f, 1));
+        directionConfig.put("body", new ActorConfig(21, 18, 28, 32, 14, 16, 1));
+        directionConfig.put("head", new ActorConfig(0, 46, 70, 56, 35, 8, 1));
         directionConfigs.put(Align.top, directionConfig);
         
         // Bottom
         directionConfig = new HashMap<>();//TODO: actually position them 
-        directionConfig.put("lLeg", new BodyPartConfig(0, 0, 50, 50, 25, 25, 1));
-        directionConfig.put("rLeg", new BodyPartConfig(10, 0, 50, 50, 25, 25, 1));
-        directionConfig.put("lArm", new BodyPartConfig(0, 50, 50, 50, 25, 25, 1));
-        directionConfig.put("rArm", new BodyPartConfig(30, 50, 50, 50, 25, 25, 1));
-        directionConfig.put("body", new BodyPartConfig(10, 50, 50, 50, 25, 25, 1));
-        directionConfig.put("head", new BodyPartConfig(20, 50, 50, 50, 25, 25, 1));
+        directionConfig.put("lLeg", new ActorConfig(0, 0, 50, 50, 25, 25, 1));
+        directionConfig.put("rLeg", new ActorConfig(10, 0, 50, 50, 25, 25, 1));
+        directionConfig.put("lArm", new ActorConfig(0, 50, 50, 50, 25, 25, 1));
+        directionConfig.put("rArm", new ActorConfig(30, 50, 50, 50, 25, 25, 1));
+        directionConfig.put("body", new ActorConfig(10, 50, 50, 50, 25, 25, 1));
+        directionConfig.put("head", new ActorConfig(20, 50, 50, 50, 25, 25, 1));
         directionConfigs.put(Align.bottom, directionConfig);
         
     }
     
     @Override
     public void act(float delta) {
-        for(Iterator<Action> iter = this.getActions().iterator(); iter.hasNext();){
-            iter.next().act(delta);
+        if (hasActions()) {
+            for(Iterator<Action> iter = this.getActions().iterator(); iter.hasNext();){
+                iter.next().act(delta);
+            }
+            changePlace();
         }
         directions.get(direction).act(delta);
-        changePlace();
     }
     
     @Override

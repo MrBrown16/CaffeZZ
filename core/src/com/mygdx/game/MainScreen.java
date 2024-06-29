@@ -19,6 +19,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.tiled.IsometricTiledMapRenderer;
 
 import datastructure.ReorderableArrayList;
 
@@ -37,9 +38,9 @@ public class MainScreen implements Screen{
     private float maxZoom = 10.0f; // Maximum zoom out level (see more of the world)
     private float minZoom = 0.80f; // Minimum zoom in level (1.0 means original size)
     ShapeRenderer shapeRenderer;
-    CharacterActor character;
+    DepthOrderableActor character;
     MyStage stage; //fuck you for making me use this
-    ReorderableArrayList<CharacterActor> characters;
+    ReorderableArrayList<DepthOrderableActor> characters;
 
 
     public MainScreen(OrthographicCamera camera, Viewport viewport, AssetManager assetManager, World world) {
@@ -67,7 +68,7 @@ public class MainScreen implements Screen{
         zoom = world.getZoom();
         
         stage = new MyStage(viewport,batch, characters);
-        character = new CharacterActor(assetManager, stage.getCharacters());
+        character = new DepthOrderableActor(assetManager, stage.getCharacters());
         stage.addActor(character);
         
         // Create and show the Swing GUI

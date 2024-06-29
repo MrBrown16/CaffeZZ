@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.tiled.IsometricTiledMapRenderer;
 
 public class MainGame extends Game implements Disposable{
     private OrthographicCamera camera;

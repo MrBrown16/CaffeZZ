@@ -1,9 +1,9 @@
 package com.mygdx.game;
 
-public class BodyPartConfig {
+public class ActorConfig {
     public float x, y, width, height, originX, originY, scale;
 
-    public BodyPartConfig(float x, float y, float width, float height, float originX, float originY, float scale) {
+    public ActorConfig(float x, float y, float width, float height, float originX, float originY, float scale) {
         this.x = x;
         this.y = y;
         this.width = width;

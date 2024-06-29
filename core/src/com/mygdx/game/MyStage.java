@@ -14,10 +14,10 @@ import datastructure.ReorderableArrayList;
 
 public class MyStage extends Stage{
     Batch batch;
-    ReorderableArrayList<CharacterActor> characters;
+    ReorderableArrayList<DepthOrderableActor> characters;
     public InputMultiplexer plexer;
     
-    public MyStage(Viewport viewport, SpriteBatch batch, ReorderableArrayList<CharacterActor> characters) {
+    public MyStage(Viewport viewport, SpriteBatch batch, ReorderableArrayList<DepthOrderableActor> characters) {
         super(viewport, batch);
         this.batch = batch;
         this.characters = characters;
@@ -31,7 +31,12 @@ public class MyStage extends Stage{
 			}
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("TouchDownEvent in "+toString());
-                characters.forEach(a->a.goTo(x, y, 100f));
+                characters.forEach(a->{
+                    if (a.getClass().isAssignableFrom(CharacterActor.class)) {
+                        ((CharacterActor)a).goTo(x, y, 100f);
+                        
+                    }
+                });
                 return false;
             }
             
@@ -47,9 +52,9 @@ public class MyStage extends Stage{
     
     @Override
     public void addActor(Actor actor) {
-        if (CharacterActor.class.isAssignableFrom(actor.getClass())) {
+        if (FurnitureActor.class.isAssignableFrom(actor.getClass())) {
             System.out.println("characteractor added to characters: "+actor);
-            characters.add((CharacterActor)actor);
+            characters.add((FurnitureActor)actor);
         }
         super.addActor(actor);
     }
@@ -68,7 +73,7 @@ public class MyStage extends Stage{
         
 		// batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-        for(CharacterActor actor : characters){
+        for(DepthOrderableActor actor : characters){
             actor.draw(batch, 1);
         }
 		batch.end();
@@ -76,11 +81,11 @@ public class MyStage extends Stage{
     }
 
     
-    public ReorderableArrayList<CharacterActor> getCharacters() {
+    public ReorderableArrayList<DepthOrderableActor> getCharacters() {
         return characters;
     }
     
-    public void setCharacters(ReorderableArrayList<CharacterActor> characters) {
+    public void setCharacters(ReorderableArrayList<DepthOrderableActor> characters) {
         this.characters = characters;
     }
 }

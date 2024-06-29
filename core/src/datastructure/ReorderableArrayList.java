@@ -4,6 +4,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import com.mygdx.game.FurnitureActor;
+import com.mygdx.game.MyActor;
+
 
 public class ReorderableArrayList<T> extends ArrayList<T> {
     private static final long serialVersionUID = 1L;
@@ -88,6 +91,11 @@ public class ReorderableArrayList<T> extends ArrayList<T> {
     public void moveToSortedPosition(T currentElement) {
         if (currentElement.getClass() == Float.class) {
             Comparator<Float> comparator = Float::compare;
+
+            moveToSortedPosition(this.indexOf(currentElement), (Comparator<T>)comparator);
+        }
+        if (currentElement.getClass() == MyActor.class) {
+            MyActorComparator comparator = new MyActorComparator();
 
             moveToSortedPosition(this.indexOf(currentElement), (Comparator<T>)comparator);
         }
